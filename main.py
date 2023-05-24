@@ -1,11 +1,27 @@
 from fastapi import FastAPI
+import sqlite3
 import uvicorn
 
+banco = sqlite3.connect('teste.db')
+cursor = banco.cursor()
+
+cursor.execute("""
+  INSERT INTO Pessoas 
+  VALUES
+  ('ovison', 56, 'ivison@gmail.com')
+""")
+banco.commit()
+
 app = FastAPI()
+cursor.execute("""
+      SELECT * FROM Pessoas
+""")
+t = cursor.fetchall()
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    
+    return {"Hello": t}
 
 @app.get("/oi")
 def read_oi():
